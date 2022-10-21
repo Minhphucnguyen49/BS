@@ -1,43 +1,35 @@
 #include <iostream>
-#include <string>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
 // this function work but is not completed
-void readParameter(char* arg, char* envList[], bool ignoreCase){
-
+void readParameter(char* arg, char* envList[], bool ignoreCase, bool nameOnly){
     int len = strlen(arg);
     char *upperCase = static_cast<char *>(malloc(sizeof(char) * len));
+    if(ignoreCase) {
+        for (int i = 0; i < len; ++i)
+        {
+            upperCase[i] = toupper((unsigned char)arg[i]);
+        }
+    }
 
-    for (int i = 0; i < len; ++i)
-    {
-        upperCase[i] = toupper((unsigned char)arg[i]);
-    }
-/*
-    char* result = std::getenv(upperCase);
-    if(result != NULL){
-        std::cout << "Variable= " << upperCase << std::endl;
-        std::cout << "Value= " << result << std::endl;
-        return;
-    }
-*/
     int i = 0;
-
+    //hier
     for(char* env = envList[0];env != nullptr && ignoreCase;env = envList[++i] ){
         char *substring = strstr(env, upperCase);
-        if (substring != nullptr) {
-            char *value = strchr(env, '=');
-            std::cout << "value " << value << std::endl;
-            *value = 0;//make it to the end of string
-            char* variable = env;//string will terminate at the delimiter '=';
-            std::cout << "variable = " << variable << std::endl;
-        }
-        //test the validity of variables
-//        std::cout << arg;
-//        std::cout << env;
+            if (substring != nullptr) {
+                if (!nameOnly){
+                    std::cout << env<<std::endl;
+                } else {
+                    char *value = strchr(env, '=');
+                    //std::cout << "value " << value << std::endl;
+                    *value = 0;//make it to the end of string
+                    char *variable = env;//string will terminate at the delimiter '=';
+                    std::cout << "variable = " << variable << std::endl;
+                }
+            }
     }
-
 
 }
 
@@ -45,17 +37,22 @@ void readParameter(char* arg, char* envList[], bool ignoreCase){
 int main(int argc, char *argv[], char* env[] )
 {
     bool ignoreCase = false;
-    std::string argument = argv[1];
+    bool nameOnly = false;
+
+    char* argument = argv[1];
 
     if(argc < 2){
         std::cout << "not enough arguments: ./envGrep [-i] [text]";
         return -1;
     }
+    //if (argument == "-i") ignoreCase = true;
+    if (!strcmp(argument,"-i")) ignoreCase = true;
+    argument = argv[1+ignoreCase];
+    //if (argument == "-n") nameOnly = true;
+    if (!strcmp(argument,"-n")) nameOnly = true;
 
-    if (argument == "-i") ignoreCase = true;
-
-    for (int i = (1 + ignoreCase); i < argc; i++){
-        readParameter(argv[i],env, ignoreCase);
+    for (int i = (1 + ignoreCase + nameOnly); i < argc; i++){
+        readParameter(argv[i],env, ignoreCase,nameOnly);
     }
     return 0;
 }
