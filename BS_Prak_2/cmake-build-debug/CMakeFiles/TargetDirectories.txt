@@ -1,0 +1,3 @@
+/cygdrive/c/Users/49152/CLionProjects/BS_Prak_2/cmake-build-debug/CMakeFiles/BS_Prak_2.dir
+/cygdrive/c/Users/49152/CLionProjects/BS_Prak_2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/cygdrive/c/Users/49152/CLionProjects/BS_Prak_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
